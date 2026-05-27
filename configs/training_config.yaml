@@ -26,8 +26,8 @@ training:
 
   # --- Memory Optimization ---
   gradient_checkpointing: true
-  fp16: false
-  bf16: true                 # bf16 preferred; code auto-detects T4 → fp16
+  fp16: true                 # T4 supports fp16 only (bf16 requires Ampere+)
+  bf16: false
   optim: "adamw_8bit"        # 8-bit Adam from bitsandbytes
   dataloader_num_workers: 2
   dataloader_pin_memory: false  # Disable on Colab to avoid OOM

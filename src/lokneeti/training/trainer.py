@@ -23,7 +23,7 @@ from transformers import (
     AutoTokenizer,
     TrainingArguments,
 )
-from trl import SFTTrainer, DataCollatorForCompletionOnlyLM
+from trl import SFTTrainer
 
 from lokneeti.training.config import TrainingConfig
 from lokneeti.utils.logging import get_logger

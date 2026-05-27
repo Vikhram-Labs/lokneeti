@@ -1,0 +1,63 @@
+# ============================================================
+# Lokneeti-3B — Colab T4 Requirements
+# Install: !pip install -q -r requirements-colab.txt
+# ============================================================
+
+# --- OpenTelemetry (pin to avoid resolver conflicts) ---
+opentelemetry-api==1.24.0
+opentelemetry-sdk==1.24.0
+opentelemetry-exporter-otlp-proto-common==1.24.0
+
+# --- Core ML Stack ---
+torch>=2.2.0
+transformers>=4.44.0
+datasets>=2.20.0
+peft>=0.12.0
+trl>=0.9.0
+accelerate>=0.33.0
+bitsandbytes>=0.43.0
+
+# --- Unsloth (QLoRA acceleration) ---
+unsloth @ git+https://github.com/unslothai/unsloth.git
+xformers>=0.0.26
+
+# --- HuggingFace Ecosystem ---
+huggingface-hub>=0.24.0
+safetensors>=0.4.0
+evaluate>=0.4.0
+
+# --- NLP & Evaluation ---
+rouge-score>=0.1.2
+sacrebleu>=2.4.0
+langdetect>=1.0.9
+
+# --- Data Processing ---
+jsonlines>=4.0.0
+pyyaml>=6.0
+pandas>=2.2.0
+numpy>=1.26.0
+ftfy>=6.1.0
+pypdf>=4.0.0
+beautifulsoup4>=4.12.0
+lxml>=5.0.0
+aiohttp>=3.9.0
+aiofiles>=23.2.0
+
+# --- Schema & Config ---
+pydantic>=2.7.0
+pydantic-settings>=2.3.0
+python-dotenv>=1.0.0
+
+# --- UI & Serving ---
+gradio>=4.40.0
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+httpx>=0.27.0
+
+# --- Logging & Utilities ---
+rich>=13.7.0
+tqdm>=4.66.0
+wandb>=0.17.0
+
+# --- Install local package ---
+-e .

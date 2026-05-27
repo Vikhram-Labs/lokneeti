@@ -1,0 +1,53 @@
+# ============================================================
+# Lokneeti-3B — Model Configuration
+# ============================================================
+
+model:
+  # Priority order: Qwen2.5-3B-Instruct → Phi-3-mini → Gemma-2B
+  base_model: "Qwen/Qwen2.5-3B-Instruct"
+  model_name: "Lokneeti-3B"
+  revision: "main"
+  trust_remote_code: true
+  dtype: "bfloat16"          # bf16 on T4 (fp16 fallback handled automatically)
+
+quantization:
+  load_in_4bit: true
+  bnb_4bit_quant_type: "nf4"             # Normal Float 4 — optimal for LLMs
+  bnb_4bit_compute_dtype: "bfloat16"
+  bnb_4bit_use_double_quant: true        # 2nd quantization saves ~0.4 bits/param
+  llm_int8_threshold: 6.0
+
+lora:
+  r: 16                     # Rank — balance quality vs. memory
+  lora_alpha: 32            # Scaling factor (2×rank)
+  lora_dropout: 0.05
+  bias: "none"
+  task_type: "CAUSAL_LM"
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+inference:
+  max_new_tokens: 512
+  temperature: 0.1           # Low temp → deterministic governance reasoning
+  top_p: 0.9
+  repetition_penalty: 1.15
+  do_sample: true
+  pad_token_id: 0
+
+tokenizer:
+  max_length: 2048
+  padding_side: "right"
+  truncation: true
+  add_eos_token: true
+
+system_prompt: |
+  You are Lokneeti, a constitutional governance reasoning system developed by Vikhram Labs.
+  Your purpose is to analyze Indian public policy, detect constitutional risks, and reason
+  about democratic governance using structured Constitutional Chain Compression methodology.
+  You do not engage in casual conversation. You produce precise, structured governance analysis.

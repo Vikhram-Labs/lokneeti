@@ -1,0 +1,66 @@
+# ============================================================
+# Lokneeti-3B — QLoRA Training Configuration
+# Target: Google Colab Free T4 (15GB VRAM)
+# ============================================================
+
+training:
+  output_dir: "./outputs/lokneeti-3b-qlora"
+  checkpoint_dir: "./checkpoints"
+  run_name: "lokneeti-3b-v1"
+
+  # --- Core Hyperparameters ---
+  num_train_epochs: 3
+  max_steps: -1              # -1 = run full epochs; set positive to override
+
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 2
+  gradient_accumulation_steps: 8   # Effective batch = 2×8 = 16
+  learning_rate: 2.0e-4
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+
+  # --- Scheduler ---
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.05
+  warmup_steps: 0           # if warmup_steps>0, overrides warmup_ratio
+
+  # --- Memory Optimization ---
+  gradient_checkpointing: true
+  fp16: false
+  bf16: true                 # bf16 preferred; code auto-detects T4 → fp16
+  optim: "adamw_8bit"        # 8-bit Adam from bitsandbytes
+  dataloader_num_workers: 2
+  dataloader_pin_memory: false  # Disable on Colab to avoid OOM
+
+  # --- Sequence Length ---
+  max_seq_length: 2048
+  packing: false             # Disable packing for governance reasoning tasks
+
+  # --- Evaluation ---
+  evaluation_strategy: "steps"
+  eval_steps: 100
+  save_strategy: "steps"
+  save_steps: 100
+  save_total_limit: 3
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false
+
+  # --- Logging ---
+  logging_dir: "./logs"
+  logging_steps: 10
+  report_to: "wandb"         # set to "none" to disable
+  push_to_hub: false         # push at end manually via push_to_hub.py
+
+  # --- Reproducibility ---
+  seed: 42
+  data_seed: 42
+
+  # --- Dataset ---
+  dataset_text_field: "text"
+  max_samples: null          # null = use full dataset; set int for quick debug
+
+unsloth:
+  use_unsloth: true          # Unsloth 2× faster training on T4
+  use_flash_attention: false # Flash Attention 2 not available on T4
+  use_rslora: false          # Rank-Stabilized LoRA (set true if r>=32)

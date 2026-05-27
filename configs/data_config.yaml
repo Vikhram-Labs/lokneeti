@@ -1,0 +1,97 @@
+# ============================================================
+# Lokneeti-3B — Data Pipeline Configuration
+# ============================================================
+
+data:
+  raw_dir: "./data/raw"
+  processed_dir: "./data/processed"
+  synthetic_dir: "./data/synthetic"
+  benchmark_dir: "./data/benchmarks"
+  final_dir: "./data/final"
+
+sources:
+  constitution:
+    enabled: true
+    url: "https://www.india.gov.in/sites/upload_files/npi/files/coi-full.pdf"
+    fallback_package: "indianconstitution"    # pip package fallback
+    output_file: "constitution_articles.jsonl"
+
+  india_code:
+    enabled: true
+    base_url: "https://www.indiacode.nic.in"
+    output_file: "india_code_acts.jsonl"
+    rate_limit_seconds: 1.5
+
+  parliament_debates:
+    enabled: true
+    base_url: "https://sansad.in/ls/questions"
+    output_file: "parliament_debates.jsonl"
+    max_pages: 50
+    rate_limit_seconds: 2.0
+
+  niti_aayog:
+    enabled: true
+    base_url: "https://niti.gov.in/publications"
+    output_file: "niti_aayog_reports.jsonl"
+    rate_limit_seconds: 2.0
+
+  supreme_court:
+    enabled: false            # Requires login — use pre-scraped data
+    output_file: "sc_judgements.jsonl"
+
+  welfare_schemes:
+    enabled: true
+    output_file: "welfare_schemes.jsonl"
+    seed_urls:
+      - "https://www.india.gov.in/spotlight/pradhan-mantri-jan-dhan-yojana"
+      - "https://pmjay.gov.in"
+      - "https://nrega.nic.in"
+      - "https://www.pmaymis.gov.in"
+
+cleaning:
+  normalize_unicode: true
+  fix_encoding: true           # ftfy
+  remove_ocr_noise: true
+  min_char_length: 50
+  max_char_length: 8000
+  dedup_threshold: 0.85        # MinHash similarity threshold
+  supported_scripts:
+    - "latin"      # English
+    - "devanagari" # Hindi, Marathi, Sanskrit
+    - "bengali"
+    - "telugu"
+    - "tamil"
+    - "gujarati"
+    - "kannada"
+    - "malayalam"
+    - "gurmukhi"   # Punjabi
+
+chunking:
+  strategy: "semantic"         # "fixed" | "semantic" | "article"
+  chunk_size: 512              # tokens
+  chunk_overlap: 64
+  respect_article_boundaries: true
+
+synthetic_generation:
+  templates_per_category: 50
+  categories:
+    - constitutional_qa
+    - policy_contradiction
+    - welfare_risk_analysis
+    - federal_conflict
+    - inclusion_analysis
+    - grievance_abstraction
+    - implementation_gap
+    - institutional_reasoning
+
+  constitutional_chain_compression:
+    enabled: true
+    max_chain_steps: 5
+    output_format: "structured"  # "structured" | "narrative"
+
+splits:
+  train: 0.90
+  validation: 0.05
+  test: 0.05
+  shuffle: true
+  seed: 42

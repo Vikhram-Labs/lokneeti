@@ -1,0 +1,103 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lokneeti"
+version = "0.1.0"
+description = "Lokneeti-3B: Constitutional Reasoning SLM for Democratic Governance Intelligence"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+authors = [{ name = "Vikhram Labs", email = "research@vikhramlabs.ai" }]
+keywords = [
+  "constitutional-ai",
+  "governance-nlp",
+  "indian-constitution",
+  "policy-reasoning",
+  "qlora",
+  "peft",
+  "sovereign-ai",
+  "multilingual",
+  "democratic-intelligence",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+  "transformers>=4.44.0",
+  "datasets>=2.20.0",
+  "peft>=0.12.0",
+  "trl>=0.9.0",
+  "accelerate>=0.33.0",
+  "bitsandbytes>=0.43.0",
+  "pydantic>=2.7.0",
+  "pydantic-settings>=2.3.0",
+  "pyyaml>=6.0",
+  "tqdm>=4.66.0",
+  "rich>=13.7.0",
+  "jsonlines>=4.0.0",
+  "pandas>=2.2.0",
+  "numpy>=1.26.0",
+  "evaluate>=0.4.0",
+  "rouge-score>=0.1.2",
+  "sacrebleu>=2.4.0",
+  "langdetect>=1.0.9",
+  "huggingface-hub>=0.24.0",
+  "safetensors>=0.4.0",
+  "gradio>=4.40.0",
+  "fastapi>=0.111.0",
+  "uvicorn[standard]>=0.30.0",
+  "httpx>=0.27.0",
+  "python-dotenv>=1.0.0",
+  "aiohttp>=3.9.0",
+  "aiofiles>=23.2.0",
+  "beautifulsoup4>=4.12.0",
+  "lxml>=5.0.0",
+  "requests>=2.31.0",
+  "pypdf>=4.0.0",
+  "unicodedata2>=15.1.0",
+  "ftfy>=6.1.0",
+]
+
+[project.optional-dependencies]
+train = [
+  "unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git",
+  "wandb>=0.17.0",
+  "xformers>=0.0.26",
+]
+dev = [
+  "pytest>=8.0.0",
+  "pytest-cov>=5.0.0",
+  "pytest-asyncio>=0.23.0",
+  "ruff>=0.5.0",
+  "mypy>=1.10.0",
+  "pre-commit>=3.7.0",
+]
+all = ["lokneeti[train,dev]"]
+
+[project.scripts]
+lokneeti-prepare  = "lokneeti.cli.prepare:main"
+lokneeti-train    = "lokneeti.cli.train:main"
+lokneeti-eval     = "lokneeti.cli.eval:main"
+lokneeti-push     = "lokneeti.cli.hub_push:main"
+lokneeti-demo     = "lokneeti.cli.demo:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+asyncio_mode = "auto"

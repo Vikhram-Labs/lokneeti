@@ -12,7 +12,6 @@ import asyncio
 import hashlib
 import json
 import time
-from dataclasses import asdict
 from pathlib import Path
 from typing import List, Optional
 
@@ -150,5 +149,5 @@ if __name__ == "__main__":
     out = Path(args.output)
     with open(out, "w", encoding="utf-8") as f:
         for ex in examples:
-            f.write(json.dumps(asdict(ex), default=str) + "\n")
+            f.write(json.dumps(ex.model_dump(), default=str) + "\n")
     log.info(f"✅ Saved {len(examples)} parliamentary examples → {out}")

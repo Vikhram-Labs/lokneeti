@@ -23,7 +23,7 @@ import asyncio
 import hashlib
 import json
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional
 from urllib.parse import urljoin, urlparse
@@ -245,7 +245,7 @@ class GovernanceScraper:
             out_file = self.output_dir / f"{target.name}.jsonl"
             with open(out_file, "a", encoding="utf-8") as f:
                 for ex in examples:
-                    f.write(json.dumps(asdict(ex), default=str) + "\n")
+                    f.write(json.dumps(ex.model_dump(), default=str) + "\n")
 
         log.info(f"🎯 Total documents scraped: {len(all_examples)}")
 

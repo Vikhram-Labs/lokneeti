@@ -8,7 +8,6 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from dataclasses import asdict
 from pathlib import Path
 from typing import Iterator, List, Optional, Tuple
 
@@ -72,7 +71,7 @@ class ConstitutionParser:
         self.output_file.parent.mkdir(parents=True, exist_ok=True)
         with open(self.output_file, "w", encoding="utf-8") as f:
             for article in tqdm(articles, desc="Saving articles"):
-                f.write(json.dumps(asdict(article), default=str) + "\n")
+                f.write(json.dumps(article.model_dump(), default=str) + "\n")
         log.info(f"✅ Saved {len(articles)} articles to {self.output_file}")
 
     def _load_text(self) -> Optional[str]:

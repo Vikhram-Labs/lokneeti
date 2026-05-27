@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import json
 import hashlib
-from dataclasses import asdict
 from pathlib import Path
 from typing import Iterator, List, Optional
 
@@ -169,7 +168,7 @@ def parse_directory(
         output_file.parent.mkdir(parents=True, exist_ok=True)
         with open(output_file, "w", encoding="utf-8") as f:
             for ex in all_examples:
-                f.write(json.dumps(asdict(ex), default=str) + "\n")
+                f.write(json.dumps(ex.model_dump(), default=str) + "\n")
         log.info(f"✅ Saved {len(all_examples)} chunks to {output_file}")
 
     return all_examples

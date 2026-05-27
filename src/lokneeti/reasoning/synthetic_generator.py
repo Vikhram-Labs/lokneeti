@@ -182,6 +182,21 @@ SCHEMES_BANK = [
     "Beti Bachao Beti Padhao",
 ]
 
+REASONS_BANK = [
+    "lack of Aadhaar-linked bank account",
+    "failure in biometric authentication",
+    "absence of permanent residential address",
+    "inability to complete digital literacy assessment",
+    "migration across state boundaries",
+    "lack of valid caste or income certificate",
+    "non-possession of a ration card",
+    "exclusion from Below Poverty Line (BPL) list",
+    "physical inability to attend mandatory verification",
+    "language barriers in accessing online portals",
+    "administrative delays in document processing",
+    "arbitrary reclassification of eligibility criteria",
+]
+
 CONFLICT_SCENARIOS_BANK = [
     "The Central Government has issued a directive mandating all States to implement a uniform land acquisition policy. Several States with State List powers over land are contesting this directive.",
     "The Centre has enacted legislation on agricultural markets (APMC). States that have their own APMC Acts are claiming federal encroachment.",
@@ -307,17 +322,16 @@ class SyntheticDataGenerator:
             art, right, atype = random.choice(ARTICLES_BANK)
             group = random.choice(GROUPS_BANK)
             scheme = random.choice(SCHEMES_BANK)
+            reason = random.choice(REASONS_BANK)
             template = random.choice(CONSTITUTIONAL_QA_TEMPLATES)
 
-            instruction = template["instruction"].format(
-                article=art, right=right, group=group, scheme=scheme, type=atype
+            fmt = dict(
+                article=art, right=right, group=group,
+                scheme=scheme, type=atype, reason=reason,
             )
-            inp = template["input"].format(
-                article=art, right=right, group=group, scheme=scheme, type=atype
-            )
-            output = template["output"].format(
-                article=art, right=right, group=group, scheme=scheme, type=atype
-            )
+            instruction = template["instruction"].format(**fmt)
+            inp = template["input"].format(**fmt) if template["input"] else ""
+            output = template["output"].format(**fmt)
 
             yield SyntheticInstruction(
                 instruction=instruction,

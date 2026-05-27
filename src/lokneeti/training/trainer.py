@@ -256,7 +256,7 @@ class LoknetiTrainer:
             bf16=cfg.bf16,
             optim=cfg.optim,
             gradient_checkpointing=cfg.gradient_checkpointing,
-            evaluation_strategy=cfg.evaluation_strategy,
+            eval_strategy=cfg.evaluation_strategy,
             eval_steps=cfg.eval_steps,
             save_strategy=cfg.save_strategy,
             save_steps=cfg.save_steps,
